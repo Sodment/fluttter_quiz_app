@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import './question.dart';
-import './answer.dart';
+import './quiz.dart';
+import './result.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,6 +13,35 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var _questionIndex = 0;
+  final _questions = const [
+    {
+      'questionText': 'What\'s your favourite color?',
+      'answers': [
+        'Black',
+        'Red',
+        'White',
+        'Green',
+      ],
+    },
+    {
+      'questionText': 'What\'s your favourite animal?',
+      'answers': [
+        'Dog',
+        'Cat',
+        'Hamster',
+        'Bird',
+      ],
+    },
+    {
+      'questionText': 'What\'s your favorite italian dish?',
+      'answers': [
+        'Spaghetti',
+        'Lasagna',
+        'Pizza',
+        'Italian sticks',
+      ],
+    },
+  ];
 
   void _answerQuestion() {
     setState(() {
@@ -22,48 +51,21 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    var questions = [
-      {
-        'questionText': 'What\'s your favourite color?',
-        'answers': [
-          'Black',
-          'Red',
-          'White',
-          'Green',
-        ],
-      },
-      {
-        'questionText': 'What\'s your favourite animal?',
-        'answers': [
-          'Dog',
-          'Cat',
-          'Hamster',
-          'Bird',
-        ],
-      },
-      {
-        'questionText': 'What\'s your favorite italian dish?',
-        'answers': [
-          'Spaghetti',
-          'Lasagna',
-          'Pizza',
-          'Italian sticks',
-        ],
-      },
-    ];
     return MaterialApp(
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primaryColor: Colors.blue,
+      ),
       home: Scaffold(
         appBar: AppBar(
           title: Text("Quiz App"),
         ),
-        body: Column(
-          children: <Widget>[
-            Question(questions[_questionIndex]['questionText'].toString()),
-            for (var answer
-                in (questions[_questionIndex]['answers'] as List<String>))
-              Answer(_answerQuestion, answer),
-          ],
-        ),
+        body: _questionIndex < _questions.length
+            ? Quiz(
+                questionIndex: _questionIndex,
+                questions: _questions,
+                answerQusetionFunction: _answerQuestion)
+            : Result("You did !it!"),
       ),
     );
   }
